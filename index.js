@@ -4,6 +4,7 @@ const request = require('request');
 const url = require('url');
  
 var yamaha;
+var maxvol;
 
 
 
@@ -20,7 +21,7 @@ function Yamaha_mcAccessory(log, config) {
   this.name = config["name"];
   this.host = config["host"];
   this.zone = config["zone"];
-  this.maxVol = config["maxvol"];
+  getLightBulbMaxVolCharacteristic(); // sets maxvol variabele dynamically by asking Yamaha device
 }
 
 Yamaha_mcAccessory.prototype = {
@@ -89,7 +90,30 @@ Yamaha_mcAccessory.prototype = {
   },
   
   // speaker characteristics
-  
+   getLightBulbMaxVolCharacteristic: function (next) {
+    const me = this;
+	var res;
+    request({
+        method: 'GET',
+            url: 'http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/getStatus',
+            headers: {
+                'X-AppName': 'MusicCast/1.0',
+                'X-AppPort': '41100',
+			},
+    }, 
+    function (error, response, body) {
+      if (error) {
+        //me.log('HTTP get error ');
+        me.log(error.message);
+        return next(error);
+      }
+	  att=JSON.parse(body);
+	  res = att.max_volume;
+	  maxvol = att.max_volume;
+	  me.log('HTTP GetStatus result:' + res);
+      return next(null, res);
+    });
+  }, 
   
   getLightBulbBrightnessCharacteristic: function (next) {
     const me = this;
@@ -109,14 +133,14 @@ Yamaha_mcAccessory.prototype = {
         return next(error);
       }
 	  att=JSON.parse(body);
-	  res = Math.floor(att.volume / this.maxVol * 100);
+	  res = Math.floor(att.volume / maxvol * 100);
 	  me.log('HTTP GetStatus result:' + res);
       return next(null, res);
     });
   },
    
   setLightBulbBrightnessCharacteristic: function (volume, next) {
-    var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setVolume?volume=' + Math.floor(volume/100 * this.maxVol);
+    var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setVolume?volume=' + Math.floor(volume/100 * maxvol);
 	const me = this;
     request({
       url: url  ,
