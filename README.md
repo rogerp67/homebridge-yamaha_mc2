@@ -16,14 +16,14 @@ Add as much speakers you have as a new accessory:
 
 "accessories": [
         {
-          "accessory": "YamahaMC",
+          "accessory": "YamahaMC2",
           "name": "Yamaha RN-602",
           "host": "192.168.1.210",
           "zone": "main",
 		  "maxvol":161
         },
         {         
-          "accessory": "YamahaMC",
+          "accessory": "YamahaMC2",
           "name": "Yamaha WX-030",
           "host": "192.168.1.220",
           "zone": "main",
