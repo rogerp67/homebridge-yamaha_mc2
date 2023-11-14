@@ -109,9 +109,10 @@ Yamaha_mcAccessory2.prototype = {
         return next(error);
       }
 	  att=JSON.parse(body);
-	  res = Math.floor(att.volume / this.maxVol * 100);
-	  me.log('HTTP GetStatus result:' + res);
-      return next(null, res);
+   	  var vv = att.volume, mv=att.max_volume, iv=vv/mv*100;
+          res = Math.floor(iv);
+          me.log('HTTP GetStatus volume(%):' + res);
+          return next(null, res);
     });
   },
    
