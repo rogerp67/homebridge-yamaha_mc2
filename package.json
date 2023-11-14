@@ -1,6 +1,6 @@
 {
   "name": "homebridge-yamaha_mc2",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Homebridge plugin for homebridge: https://github.com/rogerp67/homebridge-yamaha_mc2",
   "license": "open",
   "keywords": [
