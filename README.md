@@ -10,7 +10,7 @@ Enjoy!
 Add this to the config.json, for each device you want to add. Just adjust the name and the IP address for each accessory. 
 The zone 'main' in general should work, not to be confused with room names.
 For my Yamaha RN-602 the maximum volume setting is 161, for the WX-030 and the WX-010 it is 60. 
-Check the max volume setting for each entry by using this url in your browser, calling the API of the Musiccast receiver in your homenetwork: https://192.168.1.210/YamahaExtendedControl/v1/main/getStatus (with your own Yamaha IP address of course, set it static via the http interface)
+Check the max volume setting for each entry by using this url in your browser, calling the API of the Musiccast receiver in your homenetwork: http://192.168.1.210/YamahaExtendedControl/v1/main/getStatus (do not use https! Use your own Yamaha IP address, set it static via the http interface)
 Find the value at "max_volume", in the JSON string result.
 Add as much speakers you have as a new accessory:
 
@@ -30,4 +30,5 @@ Add as much speakers you have as a new accessory:
 		  "maxvol":60
         }   
 ]
+
 
