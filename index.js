@@ -2,15 +2,13 @@ var Service, Characteristic;
 
 const request = require('request');
 const url = require('url');
- 
+
 var yamaha;
-
-
 
 module.exports = function(homebridge) {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
-  
+
   homebridge.registerAccessory("homebridge-yamaha_mc2", "YamahaMC2", Yamaha_mcAccessory2);
 }
 
@@ -30,7 +28,7 @@ Yamaha_mcAccessory2.prototype = {
       .setCharacteristic(Characteristic.Manufacturer, "Cambit")
       .setCharacteristic(Characteristic.Model, "Yamaha MC2")
       .setCharacteristic(Characteristic.SerialNumber, "6710160340");
- 
+
     let lightbulbService = new Service.Lightbulb("Amplifier");
     lightbulbService
       .getCharacteristic(Characteristic.On)
@@ -46,7 +44,7 @@ Yamaha_mcAccessory2.prototype = {
     this.lightbulbService = lightbulbService;
     return [informationService, lightbulbService];
   },
-  
+
   getLightBulbOnCharacteristic: function (next) {
     const me = this;
     request({
@@ -55,23 +53,23 @@ Yamaha_mcAccessory2.prototype = {
             headers: {
                 'X-AppName': 'MusicCast/1.0',
                 'X-AppPort': '41100',
-			},
-    }, 
+                        },
+    },
     function (error, response, body) {
       if (error) {
         //me.log('HTTP get error ');
         me.log(error.message);
         return next(error);
       }
-	  att=JSON.parse(body);
-	  me.log('HTTP GetStatus result:' + (att.power=='on' ? "On" : "Off"));
+          att=JSON.parse(body);
+          me.log('HTTP GetStatus result:' + (att.power=='on' ? "On" : "Off"));
       return next(null, (att.power=='on'));
     });
   },
-   
+
   setLightBulbOnCharacteristic: function (on, next) {
     var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setPower?power=' + (on ? 'on' : 'standby');
-	const me = this;
+        const me = this;
     request({
       url: url  ,
       method: 'GET',
@@ -83,42 +81,42 @@ Yamaha_mcAccessory2.prototype = {
         me.log(error.message);
         return next(error);
       }
-	  //me.log('HTTP setPower succeeded with url:' + url);
+          //me.log('HTTP setPower succeeded with url:' + url);
       return next();
     });
   },
-  
+
   // speaker characteristics
-  
-  
+
+
   getLightBulbBrightnessCharacteristic: function (next) {
     const me = this;
-	var res;
+        var res;
     request({
         method: 'GET',
             url: 'http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/getStatus',
             headers: {
                 'X-AppName': 'MusicCast/1.0',
                 'X-AppPort': '41100',
-			},
-    }, 
+                        },
+    },
     function (error, response, body) {
       if (error) {
         //me.log('HTTP get error ');
         me.log(error.message);
         return next(error);
       }
-	  att=JSON.parse(body);
-   	  var vv = att.volume, mv=att.max_volume, iv=vv/mv*100;
+          att=JSON.parse(body);
+          var vv = att.volume, mv=att.max_volume, iv=vv/mv*100;
           res = Math.floor(iv);
           me.log('HTTP GetStatus volume(%):' + res);
           return next(null, res);
     });
   },
-   
+
   setLightBulbBrightnessCharacteristic: function (volume, next) {
     var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setVolume?volume=' + Math.floor(volume/100 * this.maxVol);
-	const me = this;
+        const me = this;
     request({
       url: url  ,
       method: 'GET',
@@ -130,7 +128,7 @@ Yamaha_mcAccessory2.prototype = {
         me.log(error.message);
         return next(error);
       }
-	  //me.log('HTTP setVolume succeeded with url:' + url);
+          //me.log('HTTP setVolume succeeded with url:' + url);
       return next();
     });
   }
