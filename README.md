@@ -16,19 +16,20 @@ Add as much speakers you have as a new accessory:
 
 "accessories": [
         {
-          "accessory": "homebridge-yamaha_mc",
+          "accessory": "homebridge-yamaha_mc2",
           "name": "Yamaha RN-602",
           "host": "192.168.1.210",
           "zone": "main",
 		  "maxvol":161
         },
         {         
-          "accessory": "homebridge-yamaha_mc",
+          "accessory": "homebridge-yamaha_mc2",
           "name": "Yamaha WX-030",
           "host": "192.168.1.220",
           "zone": "main",
 		  "maxvol":60
         }   
 ]
+
 
 
